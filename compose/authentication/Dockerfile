@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3335
 
-CMD [ "yarn", "nodemon", "index.js" ]
+CMD [ "yarn", "start" ]

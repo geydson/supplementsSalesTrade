@@ -137,13 +137,39 @@ services:
       dockerfile: Dockerfile
     volumes:
       - "./authentication:/usr/src/app"
+      - "/app/node_modules"
     networks:
       - kong-fc
+    ports:
+      - "3335:3335"
     deploy:
       restart_policy:
         condition: on-failure
     depends_on:
       - mongo
+
+  ###
+  ### Front-End
+  ### Microservico com implementacao do front-end
+  ###
+  module-frontend:
+    container_name: module-frontend
+    build:
+      context: module-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - "./module-frontend:/usr/src/app"
+      - "/app/node_modules"
+    networks:
+      - kong-fc
+    ports:
+      - "3001:3001"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - mongo
+      - kong
 
   mongo:
     image: mongo
@@ -151,6 +177,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - kong-fc
 
   postgres:
     image: postgres
