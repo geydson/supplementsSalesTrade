@@ -8,7 +8,7 @@ export default function* root() {
     // STARTUP
     // takeLatest(StartupTypes.STARTUP, startup),
     // LOGIN
-    takeLatest(LoginTypes.LOGIN, login),
+    // takeLatest(LoginTypes.LOGIN, login),
     // NOTIFICATION
     // takeLatest(NotificationTypes.ALERT_NOTIFICATION, NotificationAlert),
     // takeLatest(NotificationTypes.EVENT_NOTIFICATION, NotificationEvent),

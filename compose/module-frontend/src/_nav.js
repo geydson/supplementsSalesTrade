@@ -13,11 +13,12 @@ import {
   cilSpeedometer,
   // cilStar,
   cilCart,
+  cilUser,
   cilPeople,
   cilBasket,
   cilAccountLogout,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNavGroup, CNavItem, CNavTitle, CSidebarNav } from '@coreui/react'
 
 const _nav = [
   {
@@ -71,9 +72,45 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Accordion',
-        to: '/base/accordion',
+        to: '/base/spinners',
       },
     ],
+  },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Icons',
+  //   // icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'CoreUI Free',
+  //       to: '/icons/coreui-icons',
+  //       badge: {
+  //         color: 'success',
+  //         text: 'NEW',
+  //       },
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'CoreUI Flags',
+  //       to: '/icons/flags',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'CoreUI Brands',
+  //       to: '/icons/brands',
+  //     },
+  //   ],
+  // },
+  {
+    component: CNavTitle,
+    name: 'Dados',
+  },
+  {
+    component: CNavItem,
+    name: 'Usuários',
+    to: '/users',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,

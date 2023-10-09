@@ -3,14 +3,14 @@ import { LoginTypes } from './Actions'
 
 export const INITIAL_STATE = {
   token: '',
-  acess: [],
+  infosUser: {},
   language: null,
 }
 
-export const loginSuccess = (state, { token, acess }) => ({
+export const loginSuccess = (state, { token, infosUser }) => ({
   ...state,
   token,
-  acess,
+  infosUser,
 })
 
 export const setAcessUser = (state, { acess }) => ({

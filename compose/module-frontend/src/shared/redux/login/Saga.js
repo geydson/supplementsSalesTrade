@@ -1,9 +1,10 @@
 import { put } from 'redux-saga/effects'
 import LoginActions from './Actions'
 
-export function* login({ token, acess }) {
+export function* login({ token, infosUser }) {
   try {
-    yield put(LoginActions.layoutSuccess(token, acess))
+    console.log(token, infosUser)
+    yield put(LoginActions.loginSuccess(token, infosUser))
   } catch (error) {
     console.log(error)
   }

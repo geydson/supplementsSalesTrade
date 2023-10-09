@@ -51,6 +51,12 @@ export const register = async (request, response) => {
 
 export const login = async (request, response) => {
   const { username, password } = request.body;
+  let data = {
+    type: "error",
+    message: "",
+    data: null,
+  };
+
   if (username && password) {
     const user = await User.findOne({ username });
 
@@ -59,23 +65,27 @@ export const login = async (request, response) => {
       request.body.username === user.username &&
       bcrypt.compareSync(password, user.password)
     ) {
-      var token = jwt.sign({ id: user._id, username }, process.env.SECRET, {
+      const token = jwt.sign({ id: user._id, username }, process.env.SECRET, {
         expiresIn: 60 * 60 * 24,
         algorithm: "HS256",
         issuer: process.env.KEY,
       });
+      const { name, role } = user;
 
-      response
-        .status(200)
-        .send({ auth: true, token: token, name: user.name, role: user.role });
+      data.type = "success";
+      data.data = {
+        token,
+        role,
+        name,
+        auth: true,
+      };
+
+      response.status(200).send(data);
       return response;
     }
   }
-  response.status(401).send({
-    type: "error",
-    message: "Usuário ou senha inválidos!",
-    data: [],
-  });
+  data.message = "Usuário ou senha inválidos!";
+  response.status(401).send(data);
 };
 
 export const list = async (request, response) => {
