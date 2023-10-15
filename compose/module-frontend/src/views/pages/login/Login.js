@@ -46,11 +46,11 @@ const Login = () => {
         const { type, message, data } = result
 
         if (type === 'success') {
-          const { token, auth, name, role } = data
+          const { token, auth, name, role, _id, sellers } = data
           if (auth === false) {
             // setError('Usuário bloqueado')
           } else {
-            dispatch(LoginActions.loginSuccess(token, { name, role }))
+            dispatch(LoginActions.loginSuccess(token, { name, role, id: _id, sellers }))
             navigate('/', { replace: true })
           }
         } else setError(['danger', message])

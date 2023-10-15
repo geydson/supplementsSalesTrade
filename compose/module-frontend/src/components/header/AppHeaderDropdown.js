@@ -22,10 +22,13 @@ import {
   // cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import { useNavigate } from 'react-router-dom'
 
-import avatar8 from './../../assets/images/avatars/8.jpg'
+import avatar8 from './../../assets/images/avatars/1.jpg'
 
 const AppHeaderDropdown = () => {
+  const navigate = useNavigate()
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -85,7 +88,7 @@ const AppHeaderDropdown = () => {
           </CBadge>
         </CDropdownItem>
         <CDropdownDivider /> */}
-        <CDropdownItem href="#">
+        <CDropdownItem href="#" onClick={() => navigate('/logout', { replace: true })}>
           <CIcon icon={cilAccountLogout} className="me-2" />
           Sair
         </CDropdownItem>

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 
-const DefaultLayout = () => {
+const DefaultLayout = (prop) => {
   return (
     <div>
       <AppSidebar />
@@ -11,7 +11,7 @@ const DefaultLayout = () => {
         <div className="body flex-grow-1 px-3">
           <AppContent />
         </div>
-        <AppFooter />
+        {/* <AppFooter /> */}
       </div>
     </div>
   )

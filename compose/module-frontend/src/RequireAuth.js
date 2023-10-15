@@ -9,30 +9,33 @@ export const RequireAuth = ({ children }) => {
   const api = useApi()
   const dispatch = useDispatch()
   const { token } = useSelector((state) => state.login)
-  const [loading, setLoading] = useState(true)
+  // const [loading, setLoading] = useState(true)
   const [auth, setAuth] = useState(token ? true : false)
 
   useEffect(() => {
     const checkLogin = async () => {
       if (token) {
-        // const result = await api.validateToken(token)
-        // const { user, error } = result
-        // console.log('aaaa', result)
-        // if (error === '') {
-        //   const { blocked } = user
-        //   if (!blocked) {
-        //     const { acess } = result
-        //     dispatch(LoginActions.setAcessUser(acess || []))
-        setLoading(false)
-        setAuth(true)
-        //   } else {
-        //     dispatch(LoginActions.loginSuccess('', []))
-        //     setAuth(false)
-        //   }
-        // } else {
-        //   alert(error)
-        //   setAuth(false)
-        // }
+        const result = await api.validateToken(token)
+
+        if (result?.type == 'success') {
+          // setLoading(false)
+          setAuth(true)
+          // const { blocked } = user
+          //   if (!blocked) {
+          //     const { acess } = result
+          //     dispatch(LoginActions.setAcessUser(acess || []))
+          // setLoading(false)
+          // setAuth(true)
+          //   } else {
+          //     dispatch(LoginActions.loginSuccess('', []))
+          //     setAuth(false)
+          //   }
+          dispatch(LoginActions.setInfosUser({ ...result.data }))
+        } else {
+          dispatch(LoginActions.loginSuccess('', []))
+          alert(result.message)
+          setAuth(false)
+        }
       } else {
         setAuth(false)
       }

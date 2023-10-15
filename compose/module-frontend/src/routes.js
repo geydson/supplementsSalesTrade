@@ -54,11 +54,22 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
  * Páginas do sistema abaixo
  */
 const Users = React.lazy(() => import('./views/pages/users/Users'))
+const Logout = React.lazy(() => import('./views/pages/logout/Logout'))
+
+const Clients = React.lazy(() => import('./views/pages/clients/Clients'))
+const Products = React.lazy(() => import('./views/pages/products/Products'))
+const NewOrder = React.lazy(() => import('./views/pages/newOrder/NewOrder'))
+const Orders = React.lazy(() => import('./views/pages/orders/Orders'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/users', name: 'Users', element: Users },
+  { path: '/logout', name: 'Logout', element: Logout },
+  { path: '/clients', name: 'Clients', element: Clients },
+  { path: '/products', name: 'Products', element: Products },
+  { path: '/newOrder', name: 'NewOrder', element: NewOrder },
+  { path: '/orders', name: 'Orders', element: Orders },
 
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
