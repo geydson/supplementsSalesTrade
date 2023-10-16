@@ -1,4 +1,8 @@
+import dotenv from "dotenv-safe";
+import jwt from "jsonwebtoken";
 import DashBoard from "../models/DashBoard.js";
+
+dotenv.config();
 
 export const registerDashboard = async (infos) => {
   let data = {
@@ -29,4 +33,32 @@ export const registerDashboard = async (infos) => {
     data.message = "Está fatando campos necessários para o registro!";
     return data;
   }
+};
+
+export const listDataDashBoard = async (request, response) => {
+  let codVend = null;
+  let role = null;
+  let dashBoardList = [];
+
+  if (request.headers.authorization) {
+    const [authType, token] = request.headers.authorization.split(" ");
+    if (authType === "Bearer") {
+      try {
+        const decoded = jwt.verify(token, process.env.SECRET);
+
+        codVend = decoded?.codVend;
+        role = decoded?.role;
+      } catch (error) {}
+    }
+  }
+
+  if (role && role < 3) dashBoardList = await DashBoard.find({ deleted: "" });
+  else if (codVend != null)
+    dashBoardList = await DashBoard.find({ deleted: "", codVend });
+
+  response.json({
+    type: "success",
+    message: "",
+    data: dashBoardList,
+  });
 };

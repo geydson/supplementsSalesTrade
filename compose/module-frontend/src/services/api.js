@@ -74,5 +74,9 @@ export default function apiService() {
       let json = await request('get', `/orders`, {}, token)
       return json
     },
+    dataDadosDash: async (token) => {
+      let json = await request('get', `/allInfosDashBoard`, {}, token)
+      return json
+    },
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   CAvatar,
@@ -53,9 +53,81 @@ import avatar6 from 'src/assets/images/avatars/6.jpg'
 
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import useApi from '../../services/api'
+import moment from 'moment'
 
 const Dashboard = () => {
+  const { token, infosUser } = useSelector((state) => state.login)
+  const [loading, setLoading] = useState(false)
+  const [dataListDash, setLisDataDash] = useState({ data: [], months: [] })
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+
+  const api = useApi()
+
+  useEffect(() => {
+    const callDataDash = getDataDash()
+
+    return () => callDataDash
+  }, [])
+
+  const groupBy = (array, key) => {
+    return array.reduce((acc, item) => {
+      if (!acc[item[key]]) acc[item[key]] = []
+      acc[item[key]].push(item)
+      return acc
+    })
+  }
+
+  const getDataDash = async () => {
+    setLoading(true)
+
+    try {
+      const { type, data } = await api.dataDadosDash(token)
+
+      if (type == 'success') {
+        if (data.length > 0) {
+          let newDataLine = {}
+
+          data.sort(function (a, b) {
+            let x = moment(a.dateCreated).format('MM/YY').toLowerCase(),
+              y = moment(b.dateCreated).format('MM/YY').toLowerCase()
+
+            return x == y ? 0 : x > y ? 1 : -1
+          })
+
+          data.map((i) => {
+            if (!newDataLine[moment(i.dateCreated).format('MM/YY')]) {
+              newDataLine[moment(i.dateCreated).format('MM/YY')] = {
+                totalPrice: i.totalPrice,
+                totalQuant: i.totalQuant,
+                month: moment(i.dateCreated).format('MM/YY'),
+              }
+            } else {
+              newDataLine[moment(i.dateCreated).format('MM/YY')].totalPrice += i.totalPrice
+              newDataLine[moment(i.dateCreated).format('MM/YY')].totalQuant += i.totalQuant
+            }
+          })
+
+          let months = []
+          let values = []
+
+          Object.keys(newDataLine).map((i) => {
+            if (newDataLine[i]) {
+              months.push(i)
+              values.push(newDataLine[i].totalPrice)
+            }
+          })
+
+          setLisDataDash({ months, data: values })
+        }
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const progressExample = [
     { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
@@ -178,19 +250,21 @@ const Dashboard = () => {
     },
   ]
 
+  console.log(dataListDash)
+
   return (
     <>
-      <WidgetsDropdown />
+      {/* <WidgetsDropdown /> */}
       <CCard className="mb-4">
         <CCardBody>
           <CRow>
             <CCol sm={5}>
               <h4 id="traffic" className="card-title mb-0">
-                Traffic
+                Pedidos
               </h4>
-              <div className="small text-medium-emphasis">January - July 2021</div>
+              <div className="small text-medium-emphasis">Pedidos 2023</div>
             </CCol>
-            <CCol sm={7} className="d-none d-md-block">
+            {/* <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">
                 <CIcon icon={cilCloudDownload} />
               </CButton>
@@ -206,12 +280,12 @@ const Dashboard = () => {
                   </CButton>
                 ))}
               </CButtonGroup>
-            </CCol>
+            </CCol> */}
           </CRow>
           <CChartLine
             style={{ height: '300px', marginTop: '40px' }}
             data={{
-              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+              labels: dataListDash.months,
               datasets: [
                 {
                   label: 'My First dataset',
@@ -219,42 +293,34 @@ const Dashboard = () => {
                   borderColor: getStyle('--cui-info'),
                   pointHoverBackgroundColor: getStyle('--cui-info'),
                   borderWidth: 2,
-                  data: [
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                  ],
+                  data: dataListDash.data,
                   fill: true,
                 },
-                {
-                  label: 'My Second dataset',
-                  backgroundColor: 'transparent',
-                  borderColor: getStyle('--cui-success'),
-                  pointHoverBackgroundColor: getStyle('--cui-success'),
-                  borderWidth: 2,
-                  data: [
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                  ],
-                },
-                {
-                  label: 'My Third dataset',
-                  backgroundColor: 'transparent',
-                  borderColor: getStyle('--cui-danger'),
-                  pointHoverBackgroundColor: getStyle('--cui-danger'),
-                  borderWidth: 1,
-                  borderDash: [8, 5],
-                  data: [65, 65, 65, 65, 65, 65, 65],
-                },
+                // {
+                //   label: 'My Second dataset',
+                //   backgroundColor: 'transparent',
+                //   borderColor: getStyle('--cui-success'),
+                //   pointHoverBackgroundColor: getStyle('--cui-success'),
+                //   borderWidth: 2,
+                //   data: [
+                //     random(50, 200),
+                //     random(50, 200),
+                //     random(50, 200),
+                //     random(50, 200),
+                //     random(50, 200),
+                //     random(50, 200),
+                //     random(50, 200),
+                //   ],
+                // },
+                // {
+                //   label: 'My Third dataset',
+                //   backgroundColor: 'transparent',
+                //   borderColor: getStyle('--cui-danger'),
+                //   pointHoverBackgroundColor: getStyle('--cui-danger'),
+                //   borderWidth: 1,
+                //   borderDash: [8, 5],
+                //   data: [65, 65, 65, 65, 65, 65, 65],
+                // },
               ],
             }}
             options={{
@@ -293,7 +359,7 @@ const Dashboard = () => {
             }}
           />
         </CCardBody>
-        <CCardFooter>
+        {/* <CCardFooter>
           <CRow xs={{ cols: 1 }} md={{ cols: 5 }} className="text-center">
             {progressExample.map((item, index) => (
               <CCol className="mb-sm-2 mb-0" key={index}>
@@ -305,10 +371,10 @@ const Dashboard = () => {
               </CCol>
             ))}
           </CRow>
-        </CCardFooter>
+        </CCardFooter> */}
       </CCard>
 
-      <WidgetsBrand withCharts />
+      {/* <WidgetsBrand withCharts />
 
       <CRow>
         <CCol xs>
@@ -453,7 +519,7 @@ const Dashboard = () => {
             </CCardBody>
           </CCard>
         </CCol>
-      </CRow>
+      </CRow> */}
     </>
   )
 }
