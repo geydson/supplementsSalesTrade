@@ -101,6 +101,7 @@ export const logout = async (request, response) => {
 };
 
 const getListSellers = async (codVend) => {
+  // testesss
   let listSellers = await User.find(
     codVend != null ? { codVend } : { codVend: { $ne: null } }
   );
